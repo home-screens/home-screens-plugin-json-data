@@ -1,0 +1,63 @@
+{
+  "id": "json-data-block",
+  "name": "JSON Data Block",
+  "version": "1.0.0",
+  "description": "Fetch any JSON API and display it beautifully — single values, lists, tables, card grids, or status boards with per-field formatting and conditional rules.",
+  "author": "home-screens",
+  "license": "MIT",
+  "minAppVersion": "0.21.0",
+  "moduleType": "json-data",
+  "category": "Media & Display",
+  "icon": "Braces",
+
+  "defaultConfig": {
+    "url": "",
+    "method": "GET",
+    "customHeaders": [],
+    "payload": "",
+    "authType": "none",
+    "authHeaderName": "X-API-Key",
+    "authQueryParam": "apiKey",
+    "displayMode": "key-value",
+    "fields": [],
+    "tableRootPath": "",
+    "tableColumns": [],
+    "tableRowLimit": 0,
+    "tableAlternateRows": true,
+    "cardColumns": 2,
+    "statusOrientation": "vertical",
+    "refreshIntervalMs": 300000,
+    "cacheTtlMs": 60000,
+    "showStaleIndicator": true
+  },
+
+  "defaultSize": { "w": 400, "h": 400 },
+
+  "defaultStyle": {
+    "fontSize": 16,
+    "backgroundColor": "rgba(0, 0, 0, 0.3)"
+  },
+
+
+  "exports": {
+    "component": "default",
+    "configSection": "ConfigSection"
+  },
+
+  "allowedDomains": ["*"],
+
+  "permissions": ["network", "secrets"],
+
+  "secrets": [
+    {
+      "key": "auth_credential",
+      "label": "API Credential",
+      "description": "Bearer token, API key, or Base64 basic-auth string. Injected according to your Auth Type setting.",
+      "required": false,
+      "placeholder": "your-api-key-or-token"
+    }
+  ],
+
+  "dataRequirements": [],
+  "prefetchUrl": null
+}
