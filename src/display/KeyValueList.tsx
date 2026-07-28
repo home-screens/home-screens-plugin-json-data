@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ResolvedField, ModuleStyle } from './DisplayRouter';
+import { scalePx } from '../host-style';
 
 interface KeyValueListProps {
   fields: ResolvedField[];
@@ -30,7 +31,6 @@ export default function KeyValueList({ fields, style }: KeyValueListProps) {
           color: style.textColor,
           opacity: 0.4,
           fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
         }}
       >
         Configure fields to display
@@ -47,7 +47,6 @@ export default function KeyValueList({ fields, style }: KeyValueListProps) {
         overflow: 'auto',
         maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
         WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
-        fontFamily: style.fontFamily,
         color: style.textColor,
       }}
     >
@@ -62,13 +61,13 @@ export default function KeyValueList({ fields, style }: KeyValueListProps) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              padding: '8px 0',
+              padding: `${style.fontSize * 0.5}px 0`,
               borderBottom: isLast ? 'none' : '1px solid rgba(255,255,255,0.08)',
               ...(rf.ruleStyles.backgroundColor
                 ? {
                     backgroundColor: colorWithAlpha(rf.ruleStyles.backgroundColor, 0.15),
-                    borderRadius: 4,
-                    padding: '8px 6px',
+                    borderRadius: style.fontSize * 0.25,
+                    padding: `${style.fontSize * 0.5}px ${style.fontSize * 0.375}px`,
                   }
                 : {}),
             }}
@@ -78,7 +77,7 @@ export default function KeyValueList({ fields, style }: KeyValueListProps) {
                 fontSize: style.fontSize * 0.85,
                 opacity: 0.7,
                 flexShrink: 0,
-                marginRight: 12,
+                marginRight: scalePx(12),
               }}
             >
               {rf.field.label || rf.field.path}

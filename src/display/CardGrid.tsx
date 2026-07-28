@@ -20,7 +20,6 @@ export default function CardGrid({ fields, config, style }: CardGridProps) {
           color: style.textColor,
           opacity: 0.4,
           fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
         }}
       >
         Configure fields to display
@@ -33,10 +32,9 @@ export default function CardGrid({ fields, config, style }: CardGridProps) {
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${config.cardColumns}, 1fr)`,
-        gap: 8,
+        gap: style.fontSize * 0.5,
         height: '100%',
         overflow: 'auto',
-        fontFamily: style.fontFamily,
         color: style.textColor,
         alignContent: 'start',
       }}
@@ -48,8 +46,8 @@ export default function CardGrid({ fields, config, style }: CardGridProps) {
           <div
             key={rf.field.id}
             style={{
-              borderRadius: 8,
-              padding: 12,
+              borderRadius: style.fontSize * 0.5,
+              padding: style.fontSize * 0.75,
               backgroundColor:
                 rf.ruleStyles.backgroundColor || 'rgba(255,255,255,0.06)',
             }}
@@ -58,7 +56,7 @@ export default function CardGrid({ fields, config, style }: CardGridProps) {
               style={{
                 fontSize: style.fontSize * 0.7,
                 opacity: 0.5,
-                marginBottom: 6,
+                marginBottom: style.fontSize * 0.375,
               }}
             >
               {rf.field.label || rf.field.path}

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { JsonDataConfig, FetchState } from './types';
-import DisplayRouter from './display/DisplayRouter';
+import DisplayRouter, { type ModuleStyle } from './display/DisplayRouter';
+import { hostFrameStyle, normalizeHostStyle, scalePx } from './host-style';
 
 // Re-export ConfigSection as a named export for the host loader
 export { default as ConfigSection } from './config/ConfigSection';
@@ -167,21 +168,18 @@ function timeAgo(ts: number): string {
 
 interface PluginProps {
   config: Record<string, unknown>;
-  style: {
-    fontSize: number;
-    fontFamily: string;
-    textColor: string;
-    backgroundColor: string;
-    borderRadius: number;
-    padding: number;
-    opacity: number;
-    backdropBlur: number;
-  };
+  /** The host's ModuleStyle — one definition, shared with the views, so a
+   *  field added to it can't go missing on only one side. */
+  style: ModuleStyle;
   timezone?: string;
 }
 
-export default function JsonDataBlock({ config: rawConfig, style, timezone }: PluginProps) {
+export default function JsonDataBlock({ config: rawConfig, style: rawStyle, timezone }: PluginProps) {
   const config: JsonDataConfig = { ...DEFAULT_CONFIG, ...(rawConfig as Partial<JsonDataConfig>) };
+  // Repair the numbers once, here, so the frame and the views below size
+  // themselves off the same values — a bad fontSize fixed only at the root
+  // would leave every view multiplying NaN.
+  const style = normalizeHostStyle(rawStyle);
   const hostTimezone = timezone || window.__HS_SDK__.getHostSettings().timezone;
   const { data, error, lastSuccessAt, loading } = useJsonFetch(config);
   const { ModuleLoadingState } = window.__HS_SDK__;
@@ -196,21 +194,10 @@ export default function JsonDataBlock({ config: rawConfig, style, timezone }: Pl
   return (
     <div
       style={{
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
+        ...hostFrameStyle(style),
         display: 'flex',
         flexDirection: 'column',
-        fontFamily: style.fontFamily,
-        fontSize: style.fontSize,
-        color: style.textColor,
-        backgroundColor: style.backgroundColor,
-        borderRadius: style.borderRadius,
-        padding: style.padding,
-        opacity: style.opacity,
-        backdropFilter: `blur(${style.backdropBlur ?? 0}px)`,
-        WebkitBackdropFilter: `blur(${style.backdropBlur ?? 0}px)`,
-        boxSizing: 'border-box',
+        // Anchors the absolutely-positioned stale indicator below.
         position: 'relative',
       }}
     >
@@ -247,11 +234,11 @@ export default function JsonDataBlock({ config: rawConfig, style, timezone }: Pl
             position: 'absolute',
             bottom: style.padding || 8,
             right: style.padding || 8,
-            fontSize: 10,
+            fontSize: scalePx(10),
             opacity: 0.4,
             display: 'flex',
             alignItems: 'center',
-            gap: 4,
+            gap: style.fontSize * 0.25,
           }}
         >
           <span style={{ color: '#facc15' }}>●</span>

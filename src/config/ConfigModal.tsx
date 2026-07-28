@@ -3,6 +3,7 @@ import type { JsonDataConfig, FieldConfig, DisplayMode } from '../types';
 import { makeField, makeColumn } from '../types';
 import { resolvePath } from '../lib/resolve-path';
 import DisplayRouter from '../display/DisplayRouter';
+import { hostFrameStyle, normalizeHostStyle } from '../host-style';
 import DataSourcePanel from './DataSourcePanel';
 import JsonPreview from './JsonPreview';
 import FieldList from './FieldList';
@@ -37,6 +38,13 @@ const DISPLAY_MODES: { value: DisplayMode; label: string; short: string }[] = [
 export default function ConfigModal({ config, style, onChange, onClose }: ConfigModalProps) {
   const [previewData, setPreviewData] = useState<unknown>(null);
   const [tab, setTab] = useState<Tab>('source');
+
+  // A module with no background configured would preview as a hole in the
+  // modal, so give the preview alone something to sit on.
+  const previewStyle = normalizeHostStyle({
+    ...style,
+    backgroundColor: style.backgroundColor || 'rgba(0, 0, 0, 0.3)',
+  });
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -437,25 +445,13 @@ export default function ConfigModal({ config, style, onChange, onClose }: Config
                 }}
               >
                 {hasFields ? (
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      maxHeight: 500,
-                      borderRadius: style.borderRadius,
-                      overflow: 'hidden',
-                      background: style.backgroundColor || 'rgba(0,0,0,0.3)',
-                      padding: style.padding,
-                      fontFamily: style.fontFamily,
-                      fontSize: style.fontSize,
-                      color: style.textColor,
-                      boxSizing: 'border-box',
-                    }}
-                  >
+                  // The real module frame, so the preview resolves fonts and
+                  // the --u text scale exactly the way the display does.
+                  <div style={{ ...hostFrameStyle(previewStyle), maxHeight: 500 }}>
                     <DisplayRouter
                       data={previewData}
                       config={config}
-                      style={style}
+                      style={previewStyle}
                       timezone={timezone}
                     />
                   </div>

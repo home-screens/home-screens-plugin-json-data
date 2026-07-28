@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ResolvedField, ModuleStyle } from './DisplayRouter';
 import type { JsonDataConfig } from '../types';
+import { scalePx } from '../host-style';
 
 interface StatusBoardProps {
   fields: ResolvedField[];
@@ -20,7 +21,6 @@ export default function StatusBoard({ fields, config, style }: StatusBoardProps)
           color: style.textColor,
           opacity: 0.4,
           fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
         }}
       >
         Configure fields to display
@@ -36,10 +36,9 @@ export default function StatusBoard({ fields, config, style }: StatusBoardProps)
         display: 'flex',
         flexDirection: isHorizontal ? 'row' : 'column',
         flexWrap: isHorizontal ? 'wrap' : 'nowrap',
-        gap: isHorizontal ? 16 : 12,
+        gap: scalePx(isHorizontal ? 16 : 12),
         height: '100%',
         overflow: 'auto',
-        fontFamily: style.fontFamily,
         color: style.textColor,
         alignContent: 'start',
       }}
@@ -58,13 +57,13 @@ export default function StatusBoard({ fields, config, style }: StatusBoardProps)
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              gap: 8,
+              gap: style.fontSize * 0.5,
             }}
           >
             <div
               style={{
-                width: 10,
-                height: 10,
+                width: style.fontSize * 0.625,
+                height: style.fontSize * 0.625,
                 borderRadius: '50%',
                 backgroundColor: dotColor,
                 flexShrink: 0,

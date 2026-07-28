@@ -16,6 +16,17 @@ import StatusBoard from './StatusBoard';
 
 // ─── Public types re-exported for child components ──────────────────────────
 
+/** Matches the host's `ModuleStyle` (src/types/config.ts). A field missing
+ *  here is a style control this plugin silently ignores, which is exactly how
+ *  borderWidth / borderColor / shadowSize went unimplemented. The three are
+ *  optional because hosts older than them omit the values.
+ *
+ *  The root frame reads these through `hostFrameStyle` (../host-style) rather
+ *  than by hand, and the style reaching the views below has already been
+ *  through `normalizeHostStyle`, so `fontSize` is safe to multiply. Views take
+ *  color and their own type scale from these fields but never set
+ *  `fontFamily` — it is a registry id here, and only the root knows how to
+ *  turn it into a CSS stack. */
 export interface ModuleStyle {
   opacity: number;
   borderRadius: number;
@@ -25,6 +36,9 @@ export interface ModuleStyle {
   fontFamily: string;
   fontSize: number;
   backdropBlur: number;
+  borderWidth?: number;
+  borderColor?: string;
+  shadowSize?: number;
 }
 
 export interface ResolvedField {

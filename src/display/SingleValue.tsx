@@ -28,7 +28,6 @@ export default function SingleValue({ fields, style }: SingleValueProps) {
           color: style.textColor,
           opacity: 0.4,
           fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
         }}
       >
         Configure a field to display
@@ -53,7 +52,6 @@ export default function SingleValue({ fields, style }: SingleValueProps) {
         height: '100%',
         width: '100%',
         color: style.textColor,
-        fontFamily: style.fontFamily,
         textAlign: 'center',
         overflow: 'hidden',
       }}
@@ -65,7 +63,7 @@ export default function SingleValue({ fields, style }: SingleValueProps) {
             opacity: 0.6,
             fontWeight: 400,
             letterSpacing: '0.02em',
-            marginBottom: 6,
+            marginBottom: style.fontSize * 0.375,
           }}
         >
           {field.label}
@@ -82,8 +80,8 @@ export default function SingleValue({ fields, style }: SingleValueProps) {
           ...(ruleStyles.backgroundColor
             ? {
                 backgroundColor: ruleStyles.backgroundColor,
-                borderRadius: 8,
-                padding: '4px 16px',
+                borderRadius: style.fontSize * 0.5,
+                padding: `${style.fontSize * 0.25}px ${style.fontSize}px`,
               }
             : {}),
         }}

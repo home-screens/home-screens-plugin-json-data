@@ -1,12 +1,23 @@
 import React from 'react';
 import type { ResolvedRow, ModuleStyle } from './DisplayRouter';
 import type { JsonDataConfig, TableColumn } from '../types';
+import { frameBackgroundColor, scalePx } from '../host-style';
 
 interface TableViewProps {
   rows: ResolvedRow[];
   columns: TableColumn[];
   config: JsonDataConfig;
   style: ModuleStyle;
+}
+
+/** Column widths are free-form CSS. A bare number or a px value was authored
+ *  against the default text size and has to follow the Text size slider; a
+ *  percentage or `em` already does, and `auto` means don't ask. */
+function columnWidth(width: string): string | undefined {
+  const value = width?.trim();
+  if (!value || value === 'auto') return undefined;
+  const px = /^(\d+(?:\.\d+)?)(?:px)?$/i.exec(value);
+  return px ? scalePx(Number(px[1])) : value;
 }
 
 export default function TableView({ rows, columns, config, style }: TableViewProps) {
@@ -21,7 +32,6 @@ export default function TableView({ rows, columns, config, style }: TableViewPro
           color: style.textColor,
           opacity: 0.4,
           fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
         }}
       >
         Configure columns to display
@@ -35,13 +45,16 @@ export default function TableView({ rows, columns, config, style }: TableViewPro
     ? rows.slice(0, config.tableRowLimit)
     : rows;
   const remaining = rows.length - config.tableRowLimit;
+  // The sticky header paints over the rows scrolling under it, which means it
+  // paints over the frame too — so it has to use the background the frame
+  // actually drew, not the raw configured color.
+  const headerBackground = frameBackgroundColor(style);
 
   return (
     <div
       style={{
         height: '100%',
         overflow: 'auto',
-        fontFamily: style.fontFamily,
         color: style.textColor,
       }}
     >
@@ -65,10 +78,10 @@ export default function TableView({ rows, columns, config, style }: TableViewPro
                   opacity: 0.5,
                   fontWeight: 600,
                   textAlign: col.align,
-                  padding: '6px 8px',
+                  padding: `${style.fontSize * 0.375}px ${style.fontSize * 0.5}px`,
                   borderBottom: '1px solid rgba(255,255,255,0.15)',
-                  backgroundColor: style.backgroundColor || 'inherit',
-                  width: col.width !== 'auto' ? col.width : undefined,
+                  backgroundColor: headerBackground || 'inherit',
+                  width: columnWidth(col.width),
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -94,7 +107,7 @@ export default function TableView({ rows, columns, config, style }: TableViewPro
                   style={{
                     fontSize: style.fontSize,
                     textAlign: cell.column.align,
-                    padding: '6px 8px',
+                    padding: `${style.fontSize * 0.375}px ${style.fontSize * 0.5}px`,
                     fontVariantNumeric: 'tabular-nums',
                     color: cell.ruleStyles.color || style.textColor,
                     backgroundColor:
@@ -114,7 +127,7 @@ export default function TableView({ rows, columns, config, style }: TableViewPro
             textAlign: 'center',
             fontSize: style.fontSize * 0.75,
             opacity: 0.4,
-            padding: '8px 0',
+            padding: `${style.fontSize * 0.5}px 0`,
           }}
         >
           +{remaining} more
