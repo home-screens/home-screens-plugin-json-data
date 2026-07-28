@@ -33,7 +33,10 @@ function detectFields(data: unknown, rootPath: string): DetectedField[] {
 
   return Object.keys(first as Record<string, unknown>).map((key) => {
     const val = (first as Record<string, unknown>)[key];
-    let type = typeof val;
+    // Annotated as the wider `string` the field actually holds: `typeof val`
+    // narrows to the typeof-operator union, which has no 'null' member, so
+    // the assignment below is rejected without it.
+    let type: string = typeof val;
     if (val === null || val === undefined) type = 'null';
     if (Array.isArray(val)) type = 'object';
     return { key, sampleValue: val, type };

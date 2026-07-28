@@ -241,8 +241,10 @@ export default function ConfigModal({ config, style, onChange, onClose }: Config
                     />
                   </div>
 
-                  {/* JSON response preview — shown after fetch */}
-                  {previewData && (
+                  {/* JSON response preview — shown after fetch. `hasData`
+                      rather than `previewData &&`: the latter is an `unknown`
+                      expression, which is not a renderable node. */}
+                  {hasData && (
                     <div
                       style={{
                         flex: 1,
