@@ -3,3 +3,4 @@ node_modules/
 # Working documents, not project history
 .claude/plans/
 .claude/plans-finished/
+releases/
