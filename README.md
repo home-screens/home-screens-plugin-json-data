@@ -2,6 +2,8 @@
 
 A plugin for [Home Screens](https://homescreens.dev) — the open-source smart display system for Raspberry Pi — that fetches any JSON API and displays it as single values, key-value lists, tables, card grids, or status boards with per-field formatting and conditional rules.
 
+![Key-value list of a solar inverter: status, power, energy today and this month, battery, grid](screenshots/key-value.webp)
+
 ## Features
 
 - **5 display modes**: Single Value, Key-Value List, Table, Card Grid, Status Board
@@ -12,6 +14,12 @@ A plugin for [Home Screens](https://homescreens.dev) — the open-source smart d
 - **Nested path selection**: pull deeply-nested fields with dotted paths
 - **Configurable refresh + cache**: independent client poll interval and server-side cache TTL
 - **Stale-data indicator** when a fetch fails and cached data is being served
+
+## Screenshots
+
+| Status board | Table |
+|---|---|
+| ![Status board of home services colored by a rule on each value](screenshots/status-board.webp) | ![Table of upcoming launches with a formatted date column and colored status](screenshots/table.webp) |
 
 ## Installation
 
